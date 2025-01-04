@@ -3,7 +3,7 @@ if (!Scratch.extensions.unsandboxed) {alert('This extension has to be sandboxed 
   'use strict';
 
   var currentMessage = '';
-  var version = 1.2;
+  var version = 1.3;
 
   class extension {
     getInfo() {
@@ -78,7 +78,7 @@ if (!Scratch.extensions.unsandboxed) {alert('This extension has to be sandboxed 
     }
 
     sendmessage(d) {try{
-      document.getElementsByTagName('iframe')[0].contentWindow.postMessage(d.MESSAGE, '*');
+      window.frames[0].postMessage(d.MESSAGE, '*');
     }catch(e){}}
 
     customstyle(d) {try{
@@ -105,8 +105,10 @@ if (!Scratch.extensions.unsandboxed) {alert('This extension has to be sandboxed 
 
   if (Scratch.extensions.unsandboxed) {
     window.addEventListener('message', (e) => {
-      currentMessage = e.data;
-      Scratch.vm.runtime.startHats('iframemessages_onmessage');
+      if(e.source == window.frames[0]) {
+        currentMessage = e.data;
+        Scratch.vm.runtime.startHats('iframemessages_onmessage');
+      }
     });
   }
 
