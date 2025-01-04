@@ -1,8 +1,9 @@
+if (!Scratch.extensions.unsandboxed) {alert('This extension has to be sandboxed to run.')}
 (function(Scratch) {
   'use strict';
 
   var currentMessage = '';
-  var version = 1.1;
+  var version = 1.2;
 
   class extension {
     getInfo() {
@@ -14,7 +15,7 @@
           {
             blockType: Scratch.BlockType.EVENT,
             opcode: 'onmessage',
-            text: Scratch.extensions.unsandboxed?'When message received':'When message recieved in packaged version',
+            text: 'When message received',
             isEdgeActivated: false // required boilerplate
           },
           {
