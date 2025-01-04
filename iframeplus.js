@@ -2,11 +2,7 @@
   'use strict';
 
   var currentMessage = '';
-  var version = 1.0;
-
-  if (!Scratch.extensions.unsandboxed) {
-    throw new Error('This example must run unsandboxed');
-  }
+  var version = 1.1;
 
   class extension {
     getInfo() {
@@ -18,7 +14,7 @@
           {
             blockType: Scratch.BlockType.EVENT,
             opcode: 'onmessage',
-            text: 'When message received',
+            text: Scratch.extensions.unsandboxed?'When message received':'When message recieved in packaged version',
             isEdgeActivated: false // required boilerplate
           },
           {
@@ -106,10 +102,12 @@
     getversion() {return version}
   }
 
-  window.addEventListener('message', (e) => {
-    currentMessage = e.data;
-    Scratch.vm.runtime.startHats('iframemessages_onmessage');
-  });
+  if (Scratch.extensions.unsandboxed) {
+    window.addEventListener('message', (e) => {
+      currentMessage = e.data;
+      Scratch.vm.runtime.startHats('iframemessages_onmessage');
+    });
+  }
 
   Scratch.extensions.register(new extension());
 })(Scratch);
